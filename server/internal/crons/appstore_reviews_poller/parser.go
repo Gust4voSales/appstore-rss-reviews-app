@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/models"
 )
@@ -52,16 +53,41 @@ func parseAppStoreReviews(data []byte) ([]models.AppStoreReview, error) {
 			log.Printf("warning: parsing rating (id: %s) err: %v", entry.ID.Label, err)
 		}
 
+		updatedAt, err := parseReviewTimeToUTC(entry.Updated.Label)
+		if err != nil {
+			log.Printf("warning: parsing updatedAt (id: %s) err: %v", entry.ID.Label, err)
+		}
+
 		review := models.AppStoreReview{
 			ID:        entry.ID.Label,
 			Title:     entry.Title.Label,
 			Content:   entry.Content.Label,
 			Author:    entry.Author.Name.Label,
 			Rating:    rating,
-			UpdatedAt: entry.Updated.Label,
+			UpdatedAt: updatedAt,
 		}
 		reviews = append(reviews, review)
 	}
 
 	return reviews, nil
+}
+
+// parseReviewTimeToUTC parses the App Store review timestamp
+func parseReviewTimeToUTC(timeStr string) (time.Time, error) {
+	// App Store RSS feed uses ISO 8601 format like "2023-12-07T10:30:00-07:00"
+	layouts := []string{
+		time.RFC3339,
+		"2006-01-02T15:04:05-07:00",
+		"2006-01-02T15:04:05Z",
+		"2006-01-02T15:04:05",
+	}
+
+	// first parsing that works will be returned
+	for _, layout := range layouts {
+		if t, err := time.Parse(layout, timeStr); err == nil {
+			return t.UTC(), nil
+		}
+	}
+
+	return time.Time{}, fmt.Errorf("unable to parse time: %s", timeStr)
 }

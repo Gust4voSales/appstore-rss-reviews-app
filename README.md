@@ -4,11 +4,12 @@ TODO LIST:
 
 - server
   - Basic API setup ✅
-  - Cron logic to seed reviews
+  - Cron logic to seed reviews ✅
     - basic ✅
-    - 48hours logic
+    - 96hours logic ✅
   - File persistance
   - scale: support any number of apps
+  - pagination
   - tests
 - mobile
   - React Native app setup

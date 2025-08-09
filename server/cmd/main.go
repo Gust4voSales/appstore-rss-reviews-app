@@ -26,13 +26,13 @@ func main() {
 	// Load app service
 	appService := app.New(repositories, cfg)
 
+	// Load Gin router setup
+	router := api.NewRouter(appService)
+
 	// Load cron jobs
 	poller := appstore_reviews_poller.New(cfg, appService)
 	// Run cron jobs
 	go poller.Run(context.Background())
-
-	// Load Gin router setup
-	router := api.NewRouter(appService)
 
 	// HTTP server
 	srv := &http.Server{

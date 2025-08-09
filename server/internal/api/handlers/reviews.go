@@ -10,7 +10,7 @@ import (
 
 func ListReviews(appService *app.App) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		reviews := appService.ListReviews()
+		reviews := appService.ListLatestReviews(96)
 		c.JSON(http.StatusOK, struct {
 			AppID   string                  `json:"appId"`
 			Count   int                     `json:"count"`

@@ -14,7 +14,10 @@ type Config struct {
 }
 
 func Load() *Config {
-	appID := "835599320" // Hardcoded, later add dynamic app id?
+	// appID := "835599320" // Hardcoded, later add dynamic app id?
+	appID := "389801252" // Hardcoded, later add dynamic app id?
+	// appID := "1481979331" // Hardcoded, later add dynamic app id?
+	// appID := "447188370" // Hardcoded, later add dynamic app id?
 
 	port := os.Getenv("PORT")
 	pollingIntervalSecondsStr := os.Getenv("POLLING_INTERVAL_SECONDS")
@@ -24,7 +27,7 @@ func Load() *Config {
 	}
 
 	if pollingIntervalSecondsStr == "" {
-		pollingIntervalSecondsStr = "5"
+		pollingIntervalSecondsStr = "15"
 	}
 
 	pollingIntervalSeconds, err := strconv.Atoi(pollingIntervalSecondsStr)

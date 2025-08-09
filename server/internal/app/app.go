@@ -15,8 +15,12 @@ func New(repo *repositories.AppReviewsRepository, cfg *config.Config) *App {
 	return &App{repo: repo, cfg: cfg}
 }
 
-func (a *App) ListReviews() []models.AppStoreReview {
-	return a.repo.List()
+func (a *App) ListLatestReviews(hours int) []models.AppStoreReview {
+	return a.repo.ListLatest(hours)
+}
+
+func (a *App) GetLatestReview() *models.AppStoreReview {
+	return a.repo.GetLatestReview()
 }
 
 // AddReviews adds new reviews to the repository and returns the number of reviews added
