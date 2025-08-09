@@ -7,7 +7,7 @@ TODO LIST:
   - Cron logic to seed reviews ✅
     - basic ✅
     - 96hours logic ✅
-  - File persistance
+  - File persistance ✅
   - scale: support any number of apps
   - pagination
   - tests

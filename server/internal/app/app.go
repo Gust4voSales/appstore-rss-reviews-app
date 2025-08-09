@@ -24,7 +24,7 @@ func (a *App) GetLatestReview() *models.AppStoreReview {
 }
 
 // AddReviews adds new reviews to the repository and returns the number of reviews added
-func (a *App) AddReviews(reviews []models.AppStoreReview) int {
+func (a *App) AddReviews(reviews []models.AppStoreReview) (int, error) {
 	return a.repo.AddBatch(reviews)
 }
 

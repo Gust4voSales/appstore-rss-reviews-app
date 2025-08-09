@@ -21,7 +21,7 @@ func main() {
 	cfg := config.Load()
 
 	// Load repositories
-	repositories := repositories.Load()
+	repositories := repositories.Load(cfg.StorageFilePath)
 
 	// Load app service
 	appService := app.New(repositories, cfg)

@@ -86,7 +86,13 @@ func (p *AppStoreReviewsPoller) processLatestReviews(ctx context.Context) {
 
 	log.Printf(" > PROCESS: found %d reviews", len(reviews))
 
-	added := p.appService.AddReviews(reviews)
+	added, err := p.appService.AddReviews(reviews)
+	if err != nil {
+		log.Printf(" > ❌ PROCESS: error adding reviews: %v", err)
+		// intentionally not doing error handling here, if it fails, it will be retried in the next tick
+		return
+	}
+
 	if added > 0 {
 		log.Printf(" > PROCESS: added %d new reviews ✅", added)
 	} else {
