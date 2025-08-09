@@ -12,7 +12,6 @@ func NewRouter(appService *app.App) *gin.Engine {
 
 	r.GET("/health", handlers.Health)
 	r.GET("/reviews", handlers.ListReviews(appService))
-	// r.POST("/reviews", handlers.AddReviews(appService)) // testing purposes
 
 	return r
 }

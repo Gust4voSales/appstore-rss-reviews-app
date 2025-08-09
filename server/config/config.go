@@ -3,21 +3,41 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
+	"time"
 )
 
 type Config struct {
-	Port string
+	Port            string
+	PollingInterval time.Duration
+	AppID           string
 }
 
 func Load() *Config {
+	appID := "835599320" // Hardcoded, later add dynamic app id?
+
 	port := os.Getenv("PORT")
+	pollingIntervalSecondsStr := os.Getenv("POLLING_INTERVAL_SECONDS")
+
 	if port == "" {
 		port = "8080"
-		// TODO add polling interval
 	}
 
-	log.Printf("📦 Config loaded. PORT=%s", port) // PRINTING CONFIG FOR DEBUGGING PURPOSES, WOULDN'T LOG SENSITIVE DATA IN PRODUCTION ON REAL APP
+	if pollingIntervalSecondsStr == "" {
+		pollingIntervalSecondsStr = "5"
+	}
+
+	pollingIntervalSeconds, err := strconv.Atoi(pollingIntervalSecondsStr)
+	if err != nil {
+		log.Fatalf("invalid polling interval seconds: %v", err)
+	}
+
+	// PRINTING CONFIG FOR DEBUGGING PURPOSES, WOULDN'T LOG SENSITIVE DATA IN PRODUCTION ON REAL APP
+	log.Printf("📦 Config loaded. PORT=%s, POLLING_INTERVAL_SECONDS=%d, APP_ID=%s", port, pollingIntervalSeconds, appID)
+
 	return &Config{
-		Port: port,
+		Port:            port,
+		PollingInterval: time.Duration(pollingIntervalSeconds) * time.Second,
+		AppID:           appID,
 	}
 }

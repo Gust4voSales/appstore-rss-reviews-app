@@ -5,7 +5,10 @@ TODO LIST:
 - server
   - Basic API setup ✅
   - Cron logic to seed reviews
+    - basic ✅
+    - 48hours logic
   - File persistance
+  - scale: support any number of apps
   - tests
 - mobile
   - React Native app setup

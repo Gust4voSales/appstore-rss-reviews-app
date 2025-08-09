@@ -12,6 +12,7 @@ import (
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/config"
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/api"
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/app"
+	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/crons/appstore_reviews_poller"
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/repositories"
 )
 
@@ -23,7 +24,12 @@ func main() {
 	repositories := repositories.Load()
 
 	// Load app service
-	appService := app.New(repositories)
+	appService := app.New(repositories, cfg)
+
+	// Load cron jobs
+	poller := appstore_reviews_poller.New(cfg, appService)
+	// Run cron jobs
+	go poller.Run(context.Background())
 
 	// Load Gin router setup
 	router := api.NewRouter(appService)
