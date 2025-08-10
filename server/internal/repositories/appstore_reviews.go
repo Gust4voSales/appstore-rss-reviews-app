@@ -33,7 +33,7 @@ func Load(storageFilePath string) *AppReviewsRepository {
 	return repo
 }
 
-func (a *AppReviewsRepository) ListLatest(hours int) models.AppStoreReviews {
+func (a *AppReviewsRepository) ListLatest(hours int, query ReviewFilter) models.AppStoreReviews {
 	cutoffTime := time.Now().UTC().Add(-time.Duration(hours) * time.Hour)
 
 	var recentReviews models.AppStoreReviews
@@ -42,7 +42,9 @@ func (a *AppReviewsRepository) ListLatest(hours int) models.AppStoreReviews {
 	// (since I'm fetching and saving them like that) so I'm choosing not sort them
 	for _, review := range a.Reviews {
 		if review.UpdatedAt.After(cutoffTime) {
-			recentReviews = append(recentReviews, review)
+			if query.Rating == nil || review.Rating == *query.Rating {
+				recentReviews = append(recentReviews, review)
+			}
 		} else {
 			// log.Printf("review.UpdatedAt before cutoffTime: %s", review.UpdatedAt.Format(time.RFC3339))
 			break

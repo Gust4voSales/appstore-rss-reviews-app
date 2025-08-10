@@ -176,7 +176,7 @@ func TestListLatest_WithVariousTimeRanges(t *testing.T) {
 	repo := Load(filePath)
 
 	// Test with 2 hours - should return reviews from 1 hour ago
-	recentReviews := repo.ListLatest(2)
+	recentReviews := repo.ListLatest(2, ReviewFilter{})
 	if len(recentReviews) != 1 {
 		t.Errorf("Expected 1 review within 2 hours, got %d", len(recentReviews))
 	}
@@ -185,25 +185,25 @@ func TestListLatest_WithVariousTimeRanges(t *testing.T) {
 	}
 
 	// Test with 5 hours - should return reviews from 1 and 3 hours ago
-	recentReviews = repo.ListLatest(5)
+	recentReviews = repo.ListLatest(5, ReviewFilter{})
 	if len(recentReviews) != 2 {
 		t.Errorf("Expected 2 reviews within 5 hours, got %d", len(recentReviews))
 	}
 
 	// Test with 24 hours - should return reviews from 1 and 3 hours ago (not 25 hours ago)
-	recentReviews = repo.ListLatest(24)
+	recentReviews = repo.ListLatest(24, ReviewFilter{})
 	if len(recentReviews) != 2 {
 		t.Errorf("Expected 2 reviews within 24 hours, got %d", len(recentReviews))
 	}
 
 	// Test with 50 hours - should return all reviews
-	recentReviews = repo.ListLatest(50)
+	recentReviews = repo.ListLatest(50, ReviewFilter{})
 	if len(recentReviews) != 4 {
 		t.Errorf("Expected 4 reviews within 50 hours, got %d", len(recentReviews))
 	}
 
 	// Test with 0 hours - should return no reviews
-	recentReviews = repo.ListLatest(0)
+	recentReviews = repo.ListLatest(0, ReviewFilter{})
 	if len(recentReviews) != 0 {
 		t.Errorf("Expected 0 reviews within 0 hours, got %d", len(recentReviews))
 	}
@@ -213,7 +213,7 @@ func TestListLatest_WithVariousTimeRanges(t *testing.T) {
 func TestListLatest_WithEmptyRepository(t *testing.T) {
 	repo := Load("")
 
-	recentReviews := repo.ListLatest(24)
+	recentReviews := repo.ListLatest(24, ReviewFilter{})
 
 	if len(recentReviews) != 0 {
 		t.Errorf("Expected 0 reviews from empty repository, got %d", len(recentReviews))
@@ -450,5 +450,47 @@ func TestAddBatch_FileOperationError(t *testing.T) {
 
 	if addedCount != 0 {
 		t.Errorf("Expected 0 reviews to be added when file operation fails, got %d", addedCount)
+	}
+}
+
+// TestListLatest_WithRatingFilter verifies ListLatest correctly filters reviews by rating
+func TestListLatest_WithRatingFilter(t *testing.T) {
+	testReviews := createTestReviews()
+	filePath := createTempFileWithReviews(t, testReviews)
+	repo := Load(filePath)
+
+	// Test filtering by 2-star rating - should return only review-4
+	rating2 := 2
+	recentReviews := repo.ListLatest(50, ReviewFilter{Rating: &rating2})
+	if len(recentReviews) != 1 {
+		t.Errorf("Expected 1 review with 2-star rating, got %d", len(recentReviews))
+	}
+	if len(recentReviews) > 0 && recentReviews[0].ID != "review-4" {
+		t.Errorf("Expected review-4 (2-star review), got %s", recentReviews[0].ID)
+	}
+
+	// Test filtering by 1-star rating - should return no reviews (none exist)
+	rating1 := 1
+	recentReviews = repo.ListLatest(50, ReviewFilter{Rating: &rating1})
+	if len(recentReviews) != 0 {
+		t.Errorf("Expected 0 reviews with 1-star rating, got %d", len(recentReviews))
+	}
+
+	// Test filtering by rating combined with time constraints
+	// Only reviews within 5 hours (review-1 and review-2) with 4-star rating (review-2)
+	rating4 := 4
+	recentReviews = repo.ListLatest(5, ReviewFilter{Rating: &rating4})
+	if len(recentReviews) != 1 {
+		t.Errorf("Expected 1 review with 4-star rating within 5 hours, got %d", len(recentReviews))
+	}
+	if len(recentReviews) > 0 && recentReviews[0].ID != "review-2" {
+		t.Errorf("Expected review-2 (4-star review within 5 hours), got %s", recentReviews[0].ID)
+	}
+
+	// Test filtering by rating with time constraints that exclude the matching review
+	// Only reviews within 2 hours (review-1) with 4-star rating - should return nothing
+	recentReviews = repo.ListLatest(2, ReviewFilter{Rating: &rating4})
+	if len(recentReviews) != 0 {
+		t.Errorf("Expected 0 reviews with 4-star rating within 2 hours, got %d", len(recentReviews))
 	}
 }

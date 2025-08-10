@@ -16,7 +16,7 @@ type MockApp struct {
 	mockedLatestReview   *models.AppStoreReview
 }
 
-func (a *MockApp) ListLatestReviews(hours int) []models.AppStoreReview {
+func (a *MockApp) ListLatestReviews(hours int, rating *int) []models.AppStoreReview {
 	return nil
 }
 func (a *MockApp) GetLatestReview() *models.AppStoreReview {

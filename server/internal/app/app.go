@@ -7,7 +7,7 @@ import (
 )
 
 type AppServiceInterface interface {
-	ListLatestReviews(hours int) []models.AppStoreReview
+	ListLatestReviews(hours int, rating *int) []models.AppStoreReview
 	GetLatestReview() *models.AppStoreReview
 	AddReviews(reviews []models.AppStoreReview) (int, error)
 	GetAppID() string
@@ -22,8 +22,8 @@ func New(repo *repositories.AppReviewsRepository, cfg *config.Config) *App {
 	return &App{repo: repo, cfg: cfg}
 }
 
-func (a *App) ListLatestReviews(hours int) []models.AppStoreReview {
-	return a.repo.ListLatest(hours)
+func (a *App) ListLatestReviews(hours int, rating *int) []models.AppStoreReview {
+	return a.repo.ListLatest(hours, repositories.ReviewFilter{Rating: rating})
 }
 
 func (a *App) GetLatestReview() *models.AppStoreReview {
