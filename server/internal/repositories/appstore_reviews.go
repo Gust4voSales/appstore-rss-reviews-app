@@ -129,12 +129,10 @@ func (a *AppReviewsRepository) loadFromFile() error {
 		return nil // File doesn't exist, start with empty slice
 	}
 
-	// Read file
 	data, err := os.ReadFile(a.StorageFilePath)
 	if err != nil {
 		return err
 	}
 
-	// Unmarshal JSON
 	return json.Unmarshal(data, &a.Reviews)
 }
