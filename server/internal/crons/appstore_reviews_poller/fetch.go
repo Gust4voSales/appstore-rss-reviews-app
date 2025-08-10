@@ -12,6 +12,10 @@ import (
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/models"
 )
 
+type FetcherInterface interface {
+	fetchReviews(ctx context.Context, appID string, latestReviewId *string) ([]models.AppStoreReview, error)
+}
+
 // Fetcher handles fetching reviews from the App Store RSS feed
 type Fetcher struct {
 	client  *http.Client

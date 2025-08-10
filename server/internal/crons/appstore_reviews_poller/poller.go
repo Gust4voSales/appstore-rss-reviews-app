@@ -12,8 +12,8 @@ import (
 
 type AppStoreReviewsPoller struct {
 	cfg        *config.Config
-	appService *app.App
-	fetcher    *Fetcher
+	appService app.AppServiceInterface
+	fetcher    FetcherInterface
 }
 
 func New(cfg *config.Config, appService *app.App) *AppStoreReviewsPoller {

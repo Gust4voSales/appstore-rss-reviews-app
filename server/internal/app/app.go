@@ -6,6 +6,13 @@ import (
 	"github.com/Gust4voSales/appstore-rss-reviews-app/server/internal/repositories"
 )
 
+type AppServiceInterface interface {
+	ListLatestReviews(hours int) []models.AppStoreReview
+	GetLatestReview() *models.AppStoreReview
+	AddReviews(reviews []models.AppStoreReview) (int, error)
+	GetAppID() string
+}
+
 type App struct {
 	repo *repositories.AppReviewsRepository
 	cfg  *config.Config
