@@ -180,4 +180,33 @@ describe('ReviewsScreen', () => {
       });
     });
   });
+
+  describe('filter functionality', () => {
+    it('filters reviews by rating', async () => {
+      // Arrange
+      mockFetchReviews.mockResolvedValue(mockReviewsResponse);
+
+      // Act
+      const { getByTestId } = render(<ReviewsScreen />);
+
+      // Wait for initial load
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(1);
+      });
+
+      // Trigger filter by pressing the filter button
+      const star3Button = getByTestId('star-button-3');
+      act(() => {
+        fireEvent.press(star3Button);
+      });
+
+      // Assert
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(2);
+        expect(screen.queryByText('Great app!')).toBeNull();
+      });
+      expect(mockFetchReviews).toHaveBeenLastCalledWith(3);
+      expect(screen.getByText('Could be better')).toBeTruthy();
+    });
+  });
 });

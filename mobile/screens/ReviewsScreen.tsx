@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import { fetchReviews, ReviewsResponse } from 'services/reviewsService';
 import { useQuery } from 'hooks/useQuery';
 import { Header } from 'components/Header';
 import { ReviewItem } from 'components/ReviewItem';
+import { ReviewsFilter } from 'components/ReviewsFilter';
+import { Rating } from 'types/reviews';
 
 const LoadingContent = () => (
   <View className="flex-1 items-center justify-center">
@@ -25,8 +27,13 @@ const NoDataContent = () => (
 );
 
 export const ReviewsScreen = () => {
+  const [selectedRating, setSelectedRating] = useState<Rating | undefined>();
+
+  // Memoize the query function to prevent infinite updates
+  const queryFn = useCallback(() => fetchReviews(selectedRating), [selectedRating]);
+
   // Note: I would typically use a library like react-query for this, but as requested I'm avoiding 3rd party libraries
-  const { data: reviewsData, loading, error, refetch } = useQuery<ReviewsResponse>(fetchReviews);
+  const { data: reviewsData, loading, error, refetch } = useQuery<ReviewsResponse>(queryFn);
 
   const content = useMemo(() => {
     if (loading) return <LoadingContent />;
@@ -35,15 +42,18 @@ export const ReviewsScreen = () => {
 
     // render content
     return (
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ padding: 16 }}
-        showsVerticalScrollIndicator={true}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}>
-        {reviewsData.reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
-        ))}
-      </ScrollView>
+      <>
+        <ReviewsFilter selectedRating={selectedRating} onSelectRating={setSelectedRating} />
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ padding: 16, paddingTop: 0 }}
+          showsVerticalScrollIndicator={true}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}>
+          {reviewsData.reviews.map((review) => (
+            <ReviewItem key={review.id} review={review} />
+          ))}
+        </ScrollView>
+      </>
     );
   }, [loading, reviewsData, error, refetch]);
 

@@ -8,6 +8,7 @@ TODO LIST:
     - basic ✅
     - 96hours logic ✅
   - File persistance ✅
+  - query rating ✅
   - scale: support any number of apps
   - pagination
   - tests ✅
@@ -16,6 +17,7 @@ TODO LIST:
   - connecting to server to fetch data ✅
   - UI & UX ✅
   - tests ✅
+  - query rating ✅
 - docs
   - server docs
   - mobile docs

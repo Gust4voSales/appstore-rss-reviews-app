@@ -37,10 +37,6 @@ export function useQuery<T>(
     }
   }, [queryFn]);
 
-  const refetch = useCallback(async () => {
-    await executeQuery();
-  }, [executeQuery]);
-
   useEffect(() => {
     if (refetchOnMount) {
       executeQuery();
@@ -51,6 +47,6 @@ export function useQuery<T>(
     data,
     loading,
     error,
-    refetch,
+    refetch: executeQuery,
   };
 }

@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ appId, reviewCount, onRefresh, loading }) => {
   return (
-    <View className="bg-white p-4 shadow-sm">
+    <View className="border-b border-gray-200 bg-white p-4 shadow-sm">
       <View className="flex-row items-center justify-between">
         <View className="flex-1">
           <Text className="text-2xl font-bold text-gray-900">App Reviews</Text>

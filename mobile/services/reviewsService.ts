@@ -1,4 +1,4 @@
-import { Review } from '../types/reviews';
+import { Rating, Review } from 'types/reviews';
 import config from 'config/env';
 
 export interface ReviewsResponse {
@@ -7,9 +7,13 @@ export interface ReviewsResponse {
   reviews: Review[];
 }
 
-export const fetchReviews = async (): Promise<ReviewsResponse> => {
+export const fetchReviews = async (rating?: Rating): Promise<ReviewsResponse> => {
   try {
-    const response = await fetch(`${config.API_URL}/reviews/96h`, {
+    const url = new URL(`${config.API_URL}/reviews/96h`);
+    if (rating !== undefined) {
+      url.searchParams.append('rating', rating.toString());
+    }
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
