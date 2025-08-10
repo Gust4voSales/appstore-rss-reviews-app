@@ -12,10 +12,9 @@ TODO LIST:
   - pagination
   - tests
 - mobile
-  - React Native app setup
-  - connecting to server to fetch data
-  - UI & UX
-  - tests
+  - React Native app setup ✅
+  - connecting to server to fetch data ✅
+  - UI & UX ✅
 - docs
   - server docs
   - mobile docs
