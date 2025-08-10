@@ -10,11 +10,12 @@ TODO LIST:
   - File persistance ✅
   - scale: support any number of apps
   - pagination
-  - tests
+  - tests ✅
 - mobile
   - React Native app setup ✅
   - connecting to server to fetch data ✅
   - UI & UX ✅
+  - tests ✅
 - docs
   - server docs
   - mobile docs

@@ -9,7 +9,12 @@ export interface ReviewsResponse {
 
 export const fetchReviews = async (): Promise<ReviewsResponse> => {
   try {
-    const response = await fetch(`${config.API_URL}/reviews/96h`);
+    const response = await fetch(`${config.API_URL}/reviews/96h`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

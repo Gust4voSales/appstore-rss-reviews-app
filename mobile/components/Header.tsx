@@ -28,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({ appId, reviewCount, onRefresh, l
         <TouchableOpacity
           onPress={onRefresh}
           disabled={loading}
+          testID="refresh-button"
           className={`rounded-lg p-2 ${loading ? 'bg-gray-300' : 'bg-blue-500'}`}>
           <MaterialIcons name="refresh" size={24} color="white" />
         </TouchableOpacity>

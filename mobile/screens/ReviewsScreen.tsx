@@ -7,7 +7,7 @@ import { ReviewItem } from 'components/ReviewItem';
 
 const LoadingContent = () => (
   <View className="flex-1 items-center justify-center">
-    <ActivityIndicator size="large" color="#3B82F6" />
+    <ActivityIndicator size="large" color="#3B82F6" testID="activity-indicator" />
     <Text className="mt-4 text-gray-600">Loading reviews...</Text>
   </View>
 );

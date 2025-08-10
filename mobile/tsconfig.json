@@ -3,10 +3,15 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
-
+    "types": ["jest", "jest-expo"],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "services/*": ["services/*"],
+      "hooks/*": ["hooks/*"],
+      "components/*": ["components/*"],
+      "types/*": ["types/*"],
+      "screens/*": ["screens/*"],
+      "config/*": ["config/*"]
     }
   }
 }
