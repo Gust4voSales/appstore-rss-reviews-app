@@ -90,11 +90,17 @@ PORT=3000 POLLING_INTERVAL_SECONDS=30 go run cmd/main.go
 
 ### Using Docker (Optional)
 
-Build and run:
+Build
 
 ```bash
+# only needed to run once
 docker build -t appstore-rss-reviews-server .
-docker run -p 8080:8080 appstore-reviews-server
+```
+
+Run
+
+```bash
+docker run -p 8080:8080 -v appstore-reviews-data:/root/data appstore-rss-reviews-server
 ```
 
 ## API Endpoints
