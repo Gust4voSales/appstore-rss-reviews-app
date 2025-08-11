@@ -26,7 +26,7 @@ A full-stack application that monitors and displays iOS App Store RSS Reviews. T
 ## 📱 What is this project
 
 This project is a technical challenge developed for a hiring process. The goal was to create a system composed of a backend and a frontend that consumes the App Store Connect RSS feed to fetch, store, and display recent reviews for a specific iOS app.
-The backend in golang periodically fetches and persists the data to maintain state across restarts. The frontend, built with React Native, consumes an API to display reviews from the last 48 hours, sorted by newest first, including content, author, rating, and submission date.
+The backend in golang periodically fetches and persists the data to maintain state across restarts. The frontend, built with React Native, consumes an API to display reviews from the last 96 hours (4 days), sorted by newest first, including content, author, rating, and submission date.
 
 Note: The current implementation is fixed to poll reviews for a specific app ID.
 
