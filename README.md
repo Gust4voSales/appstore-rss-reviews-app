@@ -44,6 +44,7 @@ Follow the instructions in [Mobile App Documentation](./mobile/README.md)
 
 - The current implementation only polls reviews for a specific app ID.
 - As a bonus, I added filters by hour (instead of being fixed to the last 48 hours) and by rating.
+- I avoided using 3rd party libraries, as it was requested.
 
 #### Improvements / Future
 
