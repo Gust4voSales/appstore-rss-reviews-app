@@ -34,8 +34,6 @@ func main() {
 	// Run cron jobs
 	go poller.Run(context.Background())
 
-	// NOTE: Not configuring CORS because this is a local app and I'm not exposing it to the internet
-
 	// HTTP server
 	srv := &http.Server{
 		Addr:         ":" + cfg.Port,
