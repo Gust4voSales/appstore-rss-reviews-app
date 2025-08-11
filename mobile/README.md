@@ -115,24 +115,6 @@ expo start --android
 
 3. **Start the server** and scan the QR code with Expo Go
 
-## Building for Production
-
-### Create Development Build
-
-```bash
-# Install EAS CLI
-npm install -g eas-cli
-
-# Configure EAS
-eas build:configure
-
-# Build for iOS
-eas build --platform ios
-
-# Build for Android
-eas build --platform android
-```
-
 ## Testing
 
 ### Run Tests
