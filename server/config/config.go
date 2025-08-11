@@ -15,25 +15,25 @@ type Config struct {
 }
 
 func Load() *Config {
-	appID := "835599320" // Hardcoded, later add dynamic app id?
-	// appID := "389801252" // Hardcoded, later add dynamic app id?
-	// appID := "1481979331" // Hardcoded, later add dynamic app id?
-	// appID := "447188370" // Hardcoded, later add dynamic app id?
-
 	port := os.Getenv("PORT")
 	pollingIntervalSecondsStr := os.Getenv("POLLING_INTERVAL_SECONDS")
 	storageFilePath := os.Getenv("STORAGE_FILE_PATH")
+	appID := os.Getenv("APP_ID")
 
 	if port == "" {
 		port = "8080"
 	}
 
 	if pollingIntervalSecondsStr == "" {
-		pollingIntervalSecondsStr = "15"
+		pollingIntervalSecondsStr = "30"
+	}
+
+	if appID == "" {
+		appID = "447188370" // Default to Snapchat app ID
 	}
 
 	if storageFilePath == "" {
-		storageFilePath = "data/reviews.json"
+		storageFilePath = "data/reviews-" + appID + ".json"
 	}
 
 	pollingIntervalSeconds, err := strconv.Atoi(pollingIntervalSecondsStr)
