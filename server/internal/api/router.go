@@ -11,7 +11,7 @@ func NewRouter(appService *app.App) *gin.Engine {
 	r.Use(gin.Logger(), gin.Recovery())
 
 	r.GET("/health", handlers.Health)
-	r.GET("/reviews/96h", handlers.ListReviews(appService))
+	r.GET("/reviews", handlers.ListReviews(appService))
 
 	return r
 }

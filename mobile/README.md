@@ -1,6 +1,6 @@
 # App Store RSS Reviews Mobile App
 
-A React Native mobile application built with Expo that displays App Store RSS Reviews fetched from the backend service. The app shows reviews from the last 96 hours (4 days) with filtering capabilities and a modern, responsive UI.
+A React Native mobile application built with Expo that displays App Store RSS Reviews fetched from the backend service. The app shows reviews with filtering capabilities and a modern, responsive UI.
 
 ## Tech Stack
 

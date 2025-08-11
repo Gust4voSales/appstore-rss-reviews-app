@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, act, fireEvent } from '@testing-library/react-native';
 import { ReviewsScreen } from '../ReviewsScreen';
 import { fetchReviews, ReviewsResponse } from 'services/reviewsService';
-import { Review } from 'types/reviews';
+import { DEFAULT_TIME_RANGE, Review } from 'types/reviews';
 
 // Mock the services
 jest.mock('services/reviewsService');
@@ -33,6 +33,7 @@ describe('ReviewsScreen', () => {
     appId: 'test-app-123',
     count: 2,
     reviews: mockReviews,
+    lastHours: 48,
   };
 
   beforeEach(() => {
@@ -80,6 +81,7 @@ describe('ReviewsScreen', () => {
 
   describe('error state', () => {
     it('shows error message when failing to get data', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {}); // avoid console error
       // Arrange
       const errorMessage = 'Network error';
       mockFetchReviews.mockRejectedValue(new Error(errorMessage));
@@ -91,6 +93,8 @@ describe('ReviewsScreen', () => {
       await waitFor(() => {
         expect(screen.getByText('An error occurred while fetching data')).toBeTruthy();
       });
+      // Clean up
+      consoleSpy.mockRestore();
     });
   });
 
@@ -106,7 +110,9 @@ describe('ReviewsScreen', () => {
       await waitFor(() => {
         // Header should show app info
         expect(screen.getByText('App Reviews')).toBeTruthy();
-        expect(screen.getByText('App ID: test-app-123 • 2 reviews (96h)')).toBeTruthy();
+        expect(
+          screen.getByText(`App ID: test-app-123 • 2 reviews (${DEFAULT_TIME_RANGE}h)`)
+        ).toBeTruthy();
 
         // Reviews should be rendered
         expect(screen.getByText('Great app!')).toBeTruthy();
@@ -129,6 +135,7 @@ describe('ReviewsScreen', () => {
         appId: 'test-app-123',
         count: 0,
         reviews: [],
+        lastHours: 48,
       };
       mockFetchReviews.mockResolvedValue(emptyResponse);
 
@@ -205,8 +212,87 @@ describe('ReviewsScreen', () => {
         expect(mockFetchReviews).toHaveBeenCalledTimes(2);
         expect(screen.queryByText('Great app!')).toBeNull();
       });
-      expect(mockFetchReviews).toHaveBeenLastCalledWith(3);
+      expect(mockFetchReviews).toHaveBeenLastCalledWith(3, DEFAULT_TIME_RANGE);
       expect(screen.getByText('Could be better')).toBeTruthy();
+    });
+
+    it('filters reviews by date range', async () => {
+      // Arrange
+      mockFetchReviews.mockResolvedValue(mockReviewsResponse);
+
+      // Act
+      const { getByTestId } = render(<ReviewsScreen />);
+
+      // Wait for initial load
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(1);
+      });
+
+      // Open the time range dropdown
+      const timeRangeDropdownTrigger = getByTestId('time-range-dropdown-trigger');
+      act(() => {
+        fireEvent.press(timeRangeDropdownTrigger);
+      });
+
+      // Wait for dropdown to open and select 72h option
+      await waitFor(() => {
+        expect(getByTestId('time-range-option-72')).toBeTruthy();
+      });
+
+      const timeRange72Option = getByTestId('time-range-option-72');
+      act(() => {
+        fireEvent.press(timeRange72Option);
+      });
+
+      // Assert
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(2);
+      });
+      expect(mockFetchReviews).toHaveBeenLastCalledWith(undefined, 72);
+    });
+
+    it('combines rating and time range filters', async () => {
+      // Arrange
+      mockFetchReviews.mockResolvedValue(mockReviewsResponse);
+
+      // Act
+      const { getByTestId } = render(<ReviewsScreen />);
+
+      // Wait for initial load
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(1);
+      });
+
+      // First select a rating filter
+      const star4Button = getByTestId('star-button-4');
+      act(() => {
+        fireEvent.press(star4Button);
+      });
+
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(2);
+      });
+
+      // Then select a time range
+      const timeRangeDropdownTrigger = getByTestId('time-range-dropdown-trigger');
+      act(() => {
+        fireEvent.press(timeRangeDropdownTrigger);
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('time-range-option-24')).toBeTruthy();
+      });
+
+      const timeRange24Option = getByTestId('time-range-option-24');
+      act(() => {
+        fireEvent.press(timeRange24Option);
+      });
+
+      // Assert both filters are applied
+      await waitFor(() => {
+        expect(mockFetchReviews).toHaveBeenCalledTimes(3);
+      });
+      expect(mockFetchReviews).toHaveBeenLastCalledWith(4, 24);
     });
   });
 });

@@ -1,6 +1,6 @@
 # App Store RSS Reviews Server
 
-A Go backend service that polls iOS App Store Connect RSS feeds to fetch and store App Store RSS Reviews for a specific iOS app. The service provides a REST API to retrieve reviews from the last 96 hours (4 days).
+A Go backend service that polls iOS App Store Connect RSS feeds to fetch and store App Store RSS Reviews for a specific iOS app. The service provides a REST API to retrieve reviews.
 
 ## Features
 
@@ -74,7 +74,7 @@ The server can be configured using environment variables:
 | `APP_ID`                   | `389801252`         | App Id from App Store to subscribe to RSS    |
 | `STORAGE_FILE_PATH`        | `data/reviews.json` | Path to JSON storage file                    |
 
-**Note**: The current implementation is hardcoded to poll reviews for a specific app ID (`835599320`). To change the app, modify the `appID` variable in `config/config.go`.
+**Note**: The current implementation is hardcoded to poll reviews for a specific app ID.
 
 ## Running the Server
 
@@ -114,24 +114,25 @@ GET /health
 }
 ```
 
-### Get Reviews (Last 96 Hours)
+### Get Reviews
 
 ```
-GET /reviews/96h
+GET /reviews
 ```
 
 **Query Parameters:**
 
 - `rating` (optional): Filter by rating (1-5)
+- `hours` (optional): Filter reviews from last x hours. Defaults to 48h
 
 **Example Requests:**
 
 ```bash
 # Get all reviews
-curl http://localhost:8080/reviews/96h
+curl http://localhost:8080/reviews
 
-# Get only 5-star reviews
-curl http://localhost:8080/reviews/96h?rating=5
+# Get only 5-star reviews in last 24 hours
+curl http://localhost:8080/reviews?rating=2&hours=24
 ```
 
 **Response:**
@@ -149,7 +150,8 @@ curl http://localhost:8080/reviews/96h?rating=5
       "rating": 5,
       "updatedAt": "2024-01-15T10:30:00Z"
     }
-  ]
+  ],
+  "lastHours": 24
 }
 ```
 

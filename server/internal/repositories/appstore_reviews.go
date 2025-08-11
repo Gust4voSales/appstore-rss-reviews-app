@@ -36,7 +36,7 @@ func Load(storageFilePath string) *AppReviewsRepository {
 func (a *AppReviewsRepository) ListLatest(hours int, query ReviewFilter) models.AppStoreReviews {
 	cutoffTime := time.Now().UTC().Add(-time.Duration(hours) * time.Hour)
 
-	var recentReviews models.AppStoreReviews
+	var recentReviews models.AppStoreReviews = make(models.AppStoreReviews, 0)
 
 	// I'm considering that the reviews are already sorted by updatedAt in descending order
 	// (since I'm fetching and saving them like that) so I'm choosing not sort them
