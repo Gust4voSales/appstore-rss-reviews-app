@@ -71,9 +71,9 @@ export const ReviewsScreen = () => {
   );
 
   // Scroll to top function
-  const scrollToTop = useCallback(() => {
+  const scrollToTop = () => {
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, []);
+  };
 
   const content = useMemo(() => {
     if (loading) return <LoadingContent />;
