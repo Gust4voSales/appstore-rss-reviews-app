@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ appId, reviewCount, timeRange, o
           </p>
         </div>
 
-        <DefaultButton onClick={onRefresh} className="!rounded-lg !p-2" data-testid="back-to-top-button">
+        <DefaultButton onClick={onRefresh} className="!rounded-lg !p-2" data-testid="refresh-button">
           <RefreshCw size={24} color="white" className={`size-6 ${loading ? "animate-spin" : ""}`} />
         </DefaultButton>
       </div>
