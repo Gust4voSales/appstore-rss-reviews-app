@@ -34,7 +34,7 @@ src/
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v20 or higher)
 - npm or yarn
 - Backend server running
 
@@ -58,6 +58,21 @@ npm run dev
 ```
 
 4. Open your browser to `http://localhost:5173`
+
+### Using Docker (Optional)
+
+Build
+
+```bash
+# only needed to run once
+docker build . -t "appstore-rss-reviews-web"
+```
+
+Run
+
+```bash
+docker run -p 3000:3000 appstore-rss-reviews-web
+```
 
 ## Testing
 
