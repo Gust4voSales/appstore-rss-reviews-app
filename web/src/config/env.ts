@@ -26,4 +26,4 @@ const validateConfig = () => {
 validateConfig();
 
 export default config;
-export { Config };
+export type { Config };
